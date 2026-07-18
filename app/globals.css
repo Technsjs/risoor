@@ -1,0 +1,330 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #09090b;
+  --muted: #52525b;
+  --muted-bg: #f8f9fa;
+  --border: #e4e4e7;
+  --grid: #f4f4f5;
+  --accent: #2563eb;
+  --accent-light: #f0f6ff;
+  --accent-border: #e0eafd;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-bg: var(--muted-bg);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-border: var(--accent-border);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+body.ade-theme {
+  background: var(--ade-bg);
+  color: var(--ade-fg);
+}
+
+.font-serif-accent {
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-style: italic;
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Premium structural card hover effect */
+.hover-card-effect {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hover-card-effect:hover {
+  transform: translateY(-4px);
+  border-color: #a1a1aa;
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.04);
+}
+
+/* —— /ade Material-inspired dark theme —— */
+.ade-theme {
+  --ade-bg: #0f0f0f;
+  --ade-surface: #1c1c1c;
+  --ade-surface-2: #242424;
+  --ade-fg: #e8eaed;
+  --ade-muted: #9aa0a6;
+  --ade-accent: #8ab4f8;
+  --ade-accent-dim: rgba(138, 180, 248, 0.12);
+  --ade-outline: rgba(255, 255, 255, 0.08);
+  background: var(--ade-bg);
+  color: var(--ade-fg);
+}
+
+.ade-surface {
+  background: var(--ade-surface);
+  border: 1px solid var(--ade-outline);
+}
+
+.ade-hero-bg {
+  background:
+    radial-gradient(ellipse 90% 60% at 80% 20%, rgba(138, 180, 248, 0.08), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 10% 80%, rgba(138, 180, 248, 0.04), transparent 50%),
+    linear-gradient(180deg, #121212 0%, #0f0f0f 70%, #0f0f0f 100%);
+}
+
+/* Restrained cinematic streaks — mid-right / bottom like the reference */
+.ade-hero-streaks {
+  overflow: hidden;
+}
+
+.ade-streak {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(40px);
+  mix-blend-mode: screen;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.ade-streak-a {
+  width: 58%;
+  height: 12%;
+  top: 36%;
+  right: -8%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 90, 20, 0.55) 25%,
+    rgba(255, 140, 40, 0.4) 45%,
+    rgba(0, 180, 255, 0.35) 70%,
+    transparent 100%
+  );
+  transform: rotate(-16deg);
+  animation: ade-streak-soft 16s ease-in-out infinite;
+}
+
+.ade-streak-b {
+  width: 50%;
+  height: 10%;
+  top: 52%;
+  right: 0;
+  background: linear-gradient(
+    95deg,
+    transparent 0%,
+    rgba(0, 160, 255, 0.4) 30%,
+    rgba(200, 60, 160, 0.3) 60%,
+    transparent 100%
+  );
+  transform: rotate(10deg);
+  opacity: 0.45;
+  animation: ade-streak-soft 18s ease-in-out infinite reverse;
+  animation-delay: -3s;
+}
+
+.ade-streak-c {
+  width: 65%;
+  height: 11%;
+  bottom: 14%;
+  left: 15%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 80, 30, 0.35) 30%,
+    rgba(180, 50, 140, 0.28) 55%,
+    rgba(100, 80, 200, 0.2) 75%,
+    transparent 100%
+  );
+  transform: rotate(-6deg);
+  opacity: 0.4;
+  animation: ade-streak-soft 20s ease-in-out infinite;
+  animation-delay: -6s;
+}
+
+@keyframes ade-streak-soft {
+  0%,
+  100% {
+    opacity: 0.32;
+  }
+  50% {
+    opacity: 0.52;
+  }
+}
+
+.ade-watermark {
+  font-size: clamp(3.5rem, 12vw, 9rem);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.06);
+  user-select: none;
+  pointer-events: none;
+}
+
+@keyframes ade-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ade-fade-up {
+  animation: ade-fade-up 0.7s cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+.ade-fade-up-delay-1 {
+  animation-delay: 0.1s;
+}
+.ade-fade-up-delay-2 {
+  animation-delay: 0.18s;
+}
+.ade-fade-up-delay-3 {
+  animation-delay: 0.28s;
+}
+
+.ade-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ade-cta-label {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background: #fff;
+  color: #0f0f0f;
+  padding: 0.7rem 1.35rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 0.3s ease;
+}
+
+.ade-cta-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.65rem;
+  height: 2.65rem;
+  border-radius: 9999px;
+  background: #fff;
+  color: #0f0f0f;
+  transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.ade-cta-arrow svg {
+  transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.ade-cta:hover .ade-cta-label {
+  transform: translateX(-2px);
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.12);
+}
+
+.ade-cta:hover .ade-cta-arrow {
+  transform: translateX(8px);
+}
+
+.ade-cta:hover .ade-cta-arrow svg {
+  transform: translateX(2px);
+}
+
+.ade-service-row {
+  transition: background-color 0.25s ease;
+}
+
+.ade-service-row:hover {
+  background-color: rgba(138, 180, 248, 0.06);
+}
+
+.ade-service-row:hover .ade-service-num {
+  color: var(--ade-accent);
+}
+
+@keyframes ade-list-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ade-list-item {
+  animation: ade-list-in 0.5s cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+.ade-list-item:nth-child(1) {
+  animation-delay: 0.35s;
+}
+.ade-list-item:nth-child(2) {
+  animation-delay: 0.42s;
+}
+.ade-list-item:nth-child(3) {
+  animation-delay: 0.49s;
+}
+.ade-list-item:nth-child(4) {
+  animation-delay: 0.56s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ade-fade-up,
+  .ade-list-item,
+  .ade-cta-label,
+  .ade-cta-arrow,
+  .ade-cta-arrow svg,
+  .ade-streak {
+    animation: none !important;
+    transition: none !important;
+  }
+}
