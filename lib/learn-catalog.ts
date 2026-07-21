@@ -16,7 +16,8 @@ export type TrackId =
   | "languages"
   | "frontend"
   | "mobile"
-  | "backend";
+  | "backend"
+  | "cybersecurity";
 
 export type LearnTrack = {
   id: TrackId;
@@ -56,6 +57,11 @@ export const learnTracks: LearnTrack[] = [
     id: "backend",
     name: "Backend & Data",
     blurb: "APIs, servers, and databases that power real products.",
+  },
+  {
+    id: "cybersecurity",
+    name: "Cybersecurity",
+    blurb: "Secure coding, threat modeling, and defending real applications.",
   },
 ];
 
@@ -202,6 +208,35 @@ export const learnTopics: LearnTopic[] = [
     level: "Beginner",
     track: "backend",
   },
+  // Cybersecurity
+  {
+    id: "secure-coding",
+    name: "Secure coding basics",
+    builds: "Write safer code — input validation, secrets, and common mistakes.",
+    level: "Beginner",
+    track: "cybersecurity",
+  },
+  {
+    id: "owasp-top10",
+    name: "OWASP Top 10",
+    builds: "Recognize and fix the most common web application vulnerabilities.",
+    level: "Intermediate",
+    track: "cybersecurity",
+  },
+  {
+    id: "auth-threats",
+    name: "Authentication threats",
+    builds: "Sessions, tokens, MFA, and attacks against login systems.",
+    level: "Intermediate",
+    track: "cybersecurity",
+  },
+  {
+    id: "security-testing",
+    name: "Security testing",
+    builds: "Static analysis, dependency scanning, and penetration testing basics.",
+    level: "Intermediate",
+    track: "cybersecurity",
+  },
 ];
 
 export const learningPaths: LearningPath[] = [
@@ -285,6 +320,20 @@ export const learningPaths: LearningPath[] = [
       "javascript",
       "nextjs",
       "flutter",
+    ],
+  },
+  {
+    id: "security-track",
+    name: "Cybersecurity",
+    forWho: "Developers who want to build and defend production systems.",
+    topicIds: [
+      "what-is-programming",
+      "how-software-works",
+      "javascript",
+      "secure-coding",
+      "owasp-top10",
+      "auth-threats",
+      "security-testing",
     ],
   },
 ];

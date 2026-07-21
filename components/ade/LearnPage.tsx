@@ -8,6 +8,7 @@ import {
   Database,
   GitBranch,
   Layers,
+  Shield,
   Smartphone,
   Sparkles,
 } from "lucide-react";
@@ -43,6 +44,10 @@ const topicIcons: Record<string, LucideIcon> = {
   postgres: Database,
   firebase: Cloud,
   rest: Database,
+  "secure-coding": Shield,
+  "owasp-top10": Shield,
+  "auth-threats": Shield,
+  "security-testing": Shield,
 };
 
 function TopicCard({ topic }: { topic: LearnTopic }) {

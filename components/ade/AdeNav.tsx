@@ -1,7 +1,9 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "@/lib/platform/auth/mock-auth";
 
 const links = [
   { label: "Software", href: "/#software" },
@@ -14,6 +16,13 @@ const links = [
 
 export function AdeNav() {
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
+
+  const platformHref = user
+    ? user.role === "instructor"
+      ? "/instructor"
+      : "/student"
+    : "/login";
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-10">
@@ -32,6 +41,12 @@ export function AdeNav() {
               {link.label}
             </a>
           ))}
+          <Link
+            href={platformHref}
+            className="text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--ade-muted)] transition-colors hover:text-white"
+          >
+            Platform
+          </Link>
         </div>
 
         <div className="flex items-center gap-2">
@@ -65,6 +80,13 @@ export function AdeNav() {
                 {link.label}
               </a>
             ))}
+            <Link
+              href={platformHref}
+              onClick={() => setOpen(false)}
+              className="text-sm font-medium text-white/80"
+            >
+              Platform
+            </Link>
           </div>
         </div>
       )}

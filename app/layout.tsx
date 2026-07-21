@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { AuthProvider } from "@/lib/platform/auth/mock-auth";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -55,7 +56,9 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased`}
     >
-      <body className="ade-theme min-h-screen">{children}</body>
+      <body className="ade-theme min-h-screen">
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }
