@@ -4,6 +4,7 @@ import Link from "next/link";
 import { LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/lib/platform/auth/mock-auth";
+import { dashboardPathForRole } from "@/lib/platform/types";
 
 export function PlatformNav() {
   const { user, logout } = useAuth();
@@ -11,14 +12,16 @@ export function PlatformNav() {
 
   if (!user) return null;
 
-  const dashHref = user.role === "instructor" ? "/instructor" : "/student";
+  const dashHref = dashboardPathForRole(user.role);
   const links =
-    user.role === "instructor"
-      ? [
-          { label: "Overview", href: "/instructor" },
-          { label: "Courses", href: "/instructor/courses" },
-        ]
-      : [{ label: "My courses", href: "/student" }];
+    user.role === "admin"
+      ? [{ label: "Review courses", href: "/admin" }]
+      : user.role === "instructor"
+        ? [
+            { label: "Overview", href: "/instructor" },
+            { label: "Courses", href: "/instructor/courses" },
+          ]
+        : [{ label: "My courses", href: "/student" }];
 
   return (
     <header className="border-b border-white/10 bg-[#141414]/90 backdrop-blur-xl">

@@ -21,7 +21,8 @@ export function InstructorDashboard() {
     <div>
       <h1 className="text-2xl font-medium text-white">Instructor overview</h1>
       <p className="mt-2 text-sm text-[var(--ade-muted)]">
-        Manage courses, enroll students, and distribute assignments.
+        Manage live cohorts, enroll students, and distribute between-session
+        assignments.
       </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -65,7 +66,7 @@ export function InstructorDashboard() {
                     <h3 className="font-medium text-white">{course.title}</h3>
                     <p className="mt-1 text-sm text-white/50">
                       {enrollments.length} students · {assignments.length} assignments ·{" "}
-                      {course.estimatedMonths} mo
+                      Live · {course.estimatedMonths} mo
                     </p>
                   </div>
                   <ArrowRight className="size-4 text-white/30" />

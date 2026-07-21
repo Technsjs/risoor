@@ -22,10 +22,19 @@ export type PlatformRepository = {
   getCourses(): Course[];
   getCourseById(id: string): Course | undefined;
   getCoursesByInstructor(instructorId: string): Course[];
+  getApprovedCourses(): Course[];
+  getPendingCourses(): Course[];
   createCourse(
-    data: Omit<Course, "id" | "createdAt">
+    data: Omit<Course, "id" | "createdAt" | "status">
   ): Course;
   updateCourse(id: string, data: Partial<Omit<Course, "id">>): Course | undefined;
+  submitCourseForApproval(courseId: string): Course | undefined;
+  approveCourse(courseId: string, adminId: string): Course | undefined;
+  rejectCourse(
+    courseId: string,
+    adminId: string,
+    note: string
+  ): Course | undefined;
 
   getEnrollments(): Enrollment[];
   getEnrollmentsByCourse(courseId: string): Enrollment[];

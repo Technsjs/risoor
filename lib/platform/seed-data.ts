@@ -2,6 +2,14 @@ import type { PlatformStore } from "./types";
 
 const DEMO_PASSWORD = "demo";
 
+export const DEMO_ADMIN = {
+  id: "user_admin",
+  email: "admin@risoor.demo",
+  name: "Sam Admin",
+  role: "admin" as const,
+  password: DEMO_PASSWORD,
+};
+
 export const DEMO_INSTRUCTOR = {
   id: "user_instructor",
   email: "instructor@risoor.demo",
@@ -18,11 +26,16 @@ export const DEMO_STUDENTS = Array.from({ length: 6 }, (_, i) => ({
   password: DEMO_PASSWORD,
 }));
 
-export const DEMO_ACCOUNTS = [DEMO_INSTRUCTOR, ...DEMO_STUDENTS];
+export const DEMO_ACCOUNTS = [
+  DEMO_ADMIN,
+  DEMO_INSTRUCTOR,
+  ...DEMO_STUDENTS,
+];
 
 export function createSeedStore(): PlatformStore {
   const now = new Date().toISOString();
-  const courseId = "course_js_intro";
+  const courseId = "course_flutter_mobile";
+  const pendingCourseId = "course_web_pending";
 
   const assignmentId = "assign_login_ui";
   const variantFacebook = "variant_facebook_login";
@@ -33,18 +46,56 @@ export function createSeedStore(): PlatformStore {
     courses: [
       {
         id: courseId,
-        title: "Introduction to JavaScript",
-        description:
-          "Learn JavaScript fundamentals while building real UI patterns. Includes variables, functions, DOM basics, and async patterns.",
-        topicIds: [
-          "what-is-programming",
-          "how-software-works",
-          "javascript",
-          "javascript-applied",
-          "git",
+        title: "Mobile App Development · Flutter",
+        overview:
+          "A live cohort built around Zoom sessions, code reviews, and a real side project. Not a text course — you learn by building with an instructor and cohort.",
+        outcomes: [
+          "Ship a cross-platform app to TestFlight / Play Console",
+          "Integrate Firebase auth and Firestore",
+          "Structure apps with GetX or BLoC",
+          "Handle offline data and local persistence",
         ],
+        skills: [
+          "Dart",
+          "Flutter",
+          "Firebase",
+          "GetX",
+          "BLoC",
+          "Local storage",
+          "App architecture",
+          "System APIs",
+        ],
+        trackId: "mobile-cross",
+        deliveryFormat: "live",
         estimatedMonths: 6,
         instructorId: DEMO_INSTRUCTOR.id,
+        status: "approved",
+        approvedAt: now,
+        approvedBy: DEMO_ADMIN.id,
+        createdAt: now,
+      },
+      {
+        id: pendingCourseId,
+        title: "Full-stack Web Development",
+        overview:
+          "Live cohort covering frontend and backend over Zoom. Instructor-submitted — awaiting admin approval before students can enroll.",
+        outcomes: [
+          "Deploy a full-stack web app",
+          "Build REST APIs with auth",
+          "Connect React/Next.js to a database",
+        ],
+        skills: [
+          "JavaScript / TypeScript",
+          "Next.js",
+          "Node.js",
+          "PostgreSQL",
+          "REST APIs",
+        ],
+        trackId: "web-fullstack",
+        deliveryFormat: "live",
+        estimatedMonths: 6,
+        instructorId: DEMO_INSTRUCTOR.id,
+        status: "pending_approval",
         createdAt: now,
       },
     ],
@@ -64,7 +115,7 @@ export function createSeedStore(): PlatformStore {
         courseId,
         title: "Design a login flow",
         instructions:
-          "Build a linear login screen flow for your assigned brand. Complete each screen step and add notes describing your design decisions.",
+          "Between live sessions, complete your assigned login UI variant screen-by-screen. Bring designs to the next Zoom review.",
         type: "ui-design",
         createdAt: now,
       },
@@ -184,15 +235,15 @@ export function createSeedStore(): PlatformStore {
         id: "proj_1",
         userId: DEMO_STUDENTS[0].id,
         courseId,
-        templateId: "web-saas",
+        templateId: "mobile-ecommerce",
         kind: "learning",
         status: "active",
-        milestonesCompleted: ["Auth & onboarding"],
+        milestonesCompleted: ["Product listing & search"],
         selectedAt: now,
       },
     ],
   };
 }
 
-export const STORAGE_KEY = "risoor_platform_store_v1";
+export const STORAGE_KEY = "risoor_platform_store_v2";
 export const AUTH_KEY = "risoor_platform_auth_v1";

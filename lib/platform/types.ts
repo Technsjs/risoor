@@ -1,4 +1,4 @@
-export type UserRole = "student" | "instructor";
+export type UserRole = "student" | "instructor" | "admin";
 
 export type User = {
   id: string;
@@ -8,17 +8,41 @@ export type User = {
   password: string;
 };
 
-export type EnrollmentStatus = "enrolled" | "in_progress" | "completed";
+export type CourseStatus = "draft" | "pending_approval" | "approved" | "rejected";
+
+/** Live cohort track — skills/outcomes vary by platform focus */
+export type CourseTrackId =
+  | "mobile-cross"
+  | "mobile-ios"
+  | "mobile-android"
+  | "web-fullstack"
+  | "frontend"
+  | "backend"
+  | "cybersecurity"
+  | "general";
 
 export type Course = {
   id: string;
   title: string;
-  description: string;
-  topicIds: string[];
+  /** Short basics — what this live cohort is about */
+  overview: string;
+  /** What students will be able to do after the course */
+  outcomes: string[];
+  /** Tools, languages, frameworks covered (Dart, Firebase, GetX, etc.) */
+  skills: string[];
+  trackId: CourseTrackId;
+  /** Delivery is primarily live sessions (Zoom, etc.) */
+  deliveryFormat: "live";
   estimatedMonths: number;
   instructorId: string;
+  status: CourseStatus;
+  rejectionNote?: string;
+  approvedAt?: string;
+  approvedBy?: string;
   createdAt: string;
 };
+
+export type EnrollmentStatus = "enrolled" | "in_progress" | "completed";
 
 export type Enrollment = {
   id: string;
@@ -123,3 +147,9 @@ export type PlatformStore = {
   assignmentAllocations: AssignmentAllocation[];
   studentProjects: StudentProject[];
 };
+
+export function dashboardPathForRole(role: UserRole): string {
+  if (role === "admin") return "/admin";
+  if (role === "instructor") return "/instructor";
+  return "/student";
+}

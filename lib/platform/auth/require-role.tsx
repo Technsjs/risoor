@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, type ReactNode } from "react";
 import { useAuth } from "./mock-auth";
+import { dashboardPathForRole } from "../types";
 import type { UserRole } from "../types";
 
 export function RequireRole({
@@ -22,7 +23,7 @@ export function RequireRole({
       return;
     }
     if (user.role !== role) {
-      router.replace(user.role === "instructor" ? "/instructor" : "/student");
+      router.replace(dashboardPathForRole(user.role));
     }
   }, [user, loading, role, router]);
 

@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useAuth } from "@/lib/platform/auth/mock-auth";
+import { dashboardPathForRole } from "@/lib/platform/types";
 
 const links = [
   { label: "Software", href: "/#software" },
@@ -19,9 +20,7 @@ export function AdeNav() {
   const { user } = useAuth();
 
   const platformHref = user
-    ? user.role === "instructor"
-      ? "/instructor"
-      : "/student"
+    ? dashboardPathForRole(user.role)
     : "/login";
 
   return (

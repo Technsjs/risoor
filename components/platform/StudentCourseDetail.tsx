@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useCallback, useEffect } from "react";
-import { topicById } from "@/lib/learn-catalog";
 import { useAuth } from "@/lib/platform/auth/mock-auth";
 import { formatDuration, usePlatformStore } from "@/lib/platform/hooks";
 import { projectTemplateById } from "@/lib/platform/project-templates";
+import { CourseOverview } from "./CourseOverview";
 import { TimeTracker } from "./TimeTracker";
 
 export function StudentCourseDetail({ courseId }: { courseId: string }) {
@@ -37,10 +37,18 @@ export function StudentCourseDetail({ courseId }: { courseId: string }) {
     return <p className="text-sm text-white/50">Course not found.</p>;
   }
 
+  if (course.status !== "approved") {
+    return (
+      <p className="text-sm text-white/50">
+        This course is not available yet.
+      </p>
+    );
+  }
+
   if (!enrollment) {
     return (
       <p className="text-sm text-white/50">
-        You are not enrolled in this course.
+        You are not enrolled in this course. Ask your instructor to add you.
       </p>
     );
   }
@@ -56,52 +64,26 @@ export function StudentCourseDetail({ courseId }: { courseId: string }) {
         ← My courses
       </Link>
       <h1 className="mt-4 text-2xl font-medium text-white">{course.title}</h1>
-      <p className="mt-2 text-sm text-[var(--ade-muted)]">{course.description}</p>
 
       <div className="mt-4 flex flex-wrap gap-3 text-xs text-white/50">
         <span className="rounded-full border border-white/10 px-3 py-1">
-          Status: {enrollment.status}
+          {enrollment.status}
         </span>
         <span className="rounded-full border border-white/10 px-3 py-1">
-          Time: {formatDuration(enrollment.timeSpentMs)}
-        </span>
-        <span className="rounded-full border border-white/10 px-3 py-1">
-          {course.estimatedMonths} months
+          Time in course: {formatDuration(enrollment.timeSpentMs)}
         </span>
       </div>
 
-      <section className="mt-10">
-        <h2 className="text-lg font-medium text-white">Topics</h2>
-        <ul className="mt-3 space-y-2" key={version}>
-          {course.topicIds.map((id) => {
-            const topic = topicById(id);
-            return (
-              <li
-                key={id}
-                className="flex items-center justify-between rounded-xl border border-white/10 bg-[#1a1a1a] px-4 py-3"
-              >
-                <span className="text-sm text-white">{topic?.name ?? id}</span>
-                {topic?.href ? (
-                  <Link
-                    href={topic.href}
-                    className="text-xs text-[var(--ade-accent)] hover:underline"
-                  >
-                    Open lesson
-                  </Link>
-                ) : (
-                  <span className="text-xs text-white/30">Coming soon</span>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </section>
+      <div className="mt-8">
+        <CourseOverview course={course} />
+      </div>
 
       <section className="mt-10">
-        <div className="flex items-center justify-between gap-4">
-          <h2 className="text-lg font-medium text-white">Assignments</h2>
-        </div>
-        <div className="mt-4 space-y-3">
+        <h2 className="text-lg font-medium text-white">Between-session work</h2>
+        <p className="mt-1 text-sm text-white/50">
+          Assignments to complete between Zoom calls — not the main course content.
+        </p>
+        <div className="mt-4 space-y-3" key={version}>
           {assignments.length === 0 ? (
             <p className="text-sm text-white/40">No assignments yet.</p>
           ) : (
@@ -147,7 +129,7 @@ export function StudentCourseDetail({ courseId }: { courseId: string }) {
 
       <section className="mt-10">
         <div className="flex items-center justify-between gap-4">
-          <h2 className="text-lg font-medium text-white">Projects</h2>
+          <h2 className="text-lg font-medium text-white">Side project</h2>
           <Link
             href={`/student/courses/${courseId}/projects`}
             className="text-xs font-medium text-[var(--ade-accent)] hover:underline"
@@ -158,7 +140,8 @@ export function StudentCourseDetail({ courseId }: { courseId: string }) {
         <div className="mt-4 space-y-2">
           {projects.length === 0 ? (
             <p className="text-sm text-white/40">
-              Pick a learning project and optional capstone.
+              Pick a realistic project to build during live sessions (ecommerce,
+              dating app, etc.).
             </p>
           ) : (
             projects.map((p) => (

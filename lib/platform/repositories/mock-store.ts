@@ -91,11 +91,22 @@ export function createMockRepository(): PlatformRepository {
       );
     },
 
+    getApprovedCourses() {
+      return getStoreInternal().courses.filter((c) => c.status === "approved");
+    },
+
+    getPendingCourses() {
+      return getStoreInternal().courses.filter(
+        (c) => c.status === "pending_approval"
+      );
+    },
+
     createCourse(data) {
       const store = getStoreInternal();
       const course: Course = {
         ...data,
         id: id("course"),
+        status: "pending_approval",
         createdAt: new Date().toISOString(),
       };
       store.courses.push(course);
@@ -110,6 +121,42 @@ export function createMockRepository(): PlatformRepository {
       store.courses[idx] = { ...store.courses[idx], ...data };
       persist(store);
       return store.courses[idx];
+    },
+
+    submitCourseForApproval(courseId) {
+      const store = getStoreInternal();
+      const course = store.courses.find((c) => c.id === courseId);
+      if (!course || !["draft", "rejected"].includes(course.status)) {
+        return undefined;
+      }
+      course.status = "pending_approval";
+      course.rejectionNote = undefined;
+      persist(store);
+      return course;
+    },
+
+    approveCourse(courseId, adminId) {
+      const store = getStoreInternal();
+      const course = store.courses.find((c) => c.id === courseId);
+      if (!course || course.status !== "pending_approval") return undefined;
+      course.status = "approved";
+      course.approvedAt = new Date().toISOString();
+      course.approvedBy = adminId;
+      course.rejectionNote = undefined;
+      persist(store);
+      return course;
+    },
+
+    rejectCourse(courseId, adminId, note) {
+      const store = getStoreInternal();
+      const course = store.courses.find((c) => c.id === courseId);
+      if (!course || course.status !== "pending_approval") return undefined;
+      course.status = "rejected";
+      course.rejectionNote = note;
+      course.approvedAt = undefined;
+      course.approvedBy = adminId;
+      persist(store);
+      return course;
     },
 
     getEnrollments() {
@@ -128,6 +175,10 @@ export function createMockRepository(): PlatformRepository {
 
     enrollStudents(courseId, userIds) {
       const store = getStoreInternal();
+      const course = store.courses.find((c) => c.id === courseId);
+      if (!course || course.status !== "approved") {
+        return [];
+      }
       const now = new Date().toISOString();
       const created: Enrollment[] = [];
 

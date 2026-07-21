@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/platform/auth/mock-auth";
 import { DEMO_ACCOUNTS } from "@/lib/platform/seed-data";
+import { dashboardPathForRole } from "@/lib/platform/types";
 
 const fieldClass =
   "w-full rounded-xl border border-white/10 bg-[#0f0f0f] px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/25 focus:border-[var(--ade-accent)] focus:ring-1 focus:ring-[var(--ade-accent)]";
@@ -18,7 +19,7 @@ export function LoginForm() {
 
   useEffect(() => {
     if (user) {
-      router.replace(user.role === "instructor" ? "/instructor" : "/student");
+      router.replace(dashboardPathForRole(user.role));
     }
   }, [user, router]);
 
@@ -33,11 +34,13 @@ export function LoginForm() {
     const match = DEMO_ACCOUNTS.find(
       (u) => u.email.toLowerCase() === email.toLowerCase()
     );
-    router.push(match?.role === "instructor" ? "/instructor" : "/student");
+    router.push(match ? dashboardPathForRole(match.role) : "/student");
   }
 
-  function fillDemo(role: "instructor" | "student") {
-    if (role === "instructor") {
+  function fillDemo(role: "admin" | "instructor" | "student") {
+    if (role === "admin") {
+      setEmail("admin@risoor.demo");
+    } else if (role === "instructor") {
       setEmail("instructor@risoor.demo");
     } else {
       setEmail("student1@risoor.demo");
@@ -93,6 +96,13 @@ export function LoginForm() {
       </form>
 
       <div className="mt-6 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => fillDemo("admin")}
+          className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-white/60 hover:border-white/25 hover:text-white"
+        >
+          Fill admin demo
+        </button>
         <button
           type="button"
           onClick={() => fillDemo("instructor")}
