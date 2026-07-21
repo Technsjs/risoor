@@ -19,10 +19,6 @@ export function AdeNav() {
   const [open, setOpen] = useState(false);
   const { user } = useAuth();
 
-  const platformHref = user
-    ? dashboardPathForRole(user.role)
-    : "/login";
-
   return (
     <header className="absolute inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-10">
       <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 rounded-full border border-white/10 bg-[#1c1c1c]/80 px-5 py-2.5 backdrop-blur-xl sm:px-6">
@@ -41,10 +37,10 @@ export function AdeNav() {
             </a>
           ))}
           <Link
-            href={platformHref}
+            href={user ? dashboardPathForRole(user.role) : "/learn/login"}
             className="text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--ade-muted)] transition-colors hover:text-white"
           >
-            Platform
+            {user ? "Dashboard" : "Login"}
           </Link>
         </div>
 
@@ -80,11 +76,11 @@ export function AdeNav() {
               </a>
             ))}
             <Link
-              href={platformHref}
+              href={user ? dashboardPathForRole(user.role) : "/learn/login"}
               onClick={() => setOpen(false)}
               className="text-sm font-medium text-white/80"
             >
-              Platform
+              {user ? "Dashboard" : "Login"}
             </Link>
           </div>
         </div>

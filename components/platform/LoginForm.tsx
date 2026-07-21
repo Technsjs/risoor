@@ -51,9 +51,9 @@ export function LoginForm() {
 
   return (
     <div className="mx-auto max-w-md">
-      <h1 className="text-2xl font-medium text-white">Platform login</h1>
+      <h1 className="mt-3 text-2xl font-medium text-white">Sign in</h1>
       <p className="mt-2 text-sm text-[var(--ade-muted)]">
-        Sign in as a student or instructor. Demo accounts use password{" "}
+        Students, instructors, and admins — demo password is{" "}
         <code className="text-white/70">demo</code>.
       </p>
 

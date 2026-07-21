@@ -22,6 +22,7 @@ import {
 } from "@/lib/learn-catalog";
 import { AdeFooter } from "@/components/ade/AdeFooter";
 import { AdeNav } from "@/components/ade/AdeNav";
+import { LearnLoginCta } from "@/components/ade/LearnLoginCta";
 import { LearnApplyForm } from "@/components/ade/LearnApplyForm";
 
 const topicIcons: Record<string, LucideIcon> = {
@@ -130,6 +131,7 @@ export function LearnPage() {
               >
                 Start free
               </a>
+              <LearnLoginCta />
             </div>
           </div>
         </section>

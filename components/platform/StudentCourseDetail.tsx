@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useCallback, useEffect } from "react";
 import { useAuth } from "@/lib/platform/auth/mock-auth";
+import { getCourseTimeline } from "@/lib/platform/course-progress";
 import { formatDuration, usePlatformStore } from "@/lib/platform/hooks";
 import { projectTemplateById } from "@/lib/platform/project-templates";
 import { CourseOverview } from "./CourseOverview";
+import { CourseProgressCard } from "./CourseProgressCard";
 import { TimeTracker } from "./TimeTracker";
 
 export function StudentCourseDetail({ courseId }: { courseId: string }) {
@@ -53,8 +55,10 @@ export function StudentCourseDetail({ courseId }: { courseId: string }) {
     );
   }
 
+  const timeline = getCourseTimeline(enrollment, course);
   const assignments = repo.getAssignmentsByCourse(courseId);
   const projects = repo.getStudentProjectsByUser(user.id, courseId);
+  const learningProject = projects.find((p) => p.kind === "learning");
 
   return (
     <div>
@@ -65,23 +69,53 @@ export function StudentCourseDetail({ courseId }: { courseId: string }) {
       </Link>
       <h1 className="mt-4 text-2xl font-medium text-white">{course.title}</h1>
 
-      <div className="mt-4 flex flex-wrap gap-3 text-xs text-white/50">
-        <span className="rounded-full border border-white/10 px-3 py-1">
-          {enrollment.status}
-        </span>
-        <span className="rounded-full border border-white/10 px-3 py-1">
-          Time in course: {formatDuration(enrollment.timeSpentMs)}
-        </span>
+      <div className="mt-6">
+        <CourseProgressCard
+          timeline={timeline}
+          timeSpentLabel={formatDuration(enrollment.timeSpentMs)}
+        />
       </div>
 
       <div className="mt-8">
         <CourseOverview course={course} />
       </div>
 
+      {learningProject && (
+        <section className="mt-10 rounded-2xl border border-white/10 bg-[#1a1a1a] p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="text-sm font-medium text-white">Current side project</h2>
+            <Link
+              href={`/student/settings?course=${courseId}`}
+              className="text-xs text-[var(--ade-accent)] hover:underline"
+            >
+              Manage in Settings
+            </Link>
+          </div>
+          <p className="mt-2 text-white">
+            {projectTemplateById(learningProject.templateId)?.name}
+          </p>
+          <p className="mt-1 text-xs text-white/45">
+            {learningProject.milestonesCompleted.length} milestones completed
+          </p>
+        </section>
+      )}
+
+      {!learningProject && (
+        <section className="mt-10 rounded-2xl border border-dashed border-white/15 p-5 text-center">
+          <p className="text-sm text-white/50">No project selected yet.</p>
+          <Link
+            href={`/student/settings?course=${courseId}`}
+            className="mt-2 inline-block text-sm text-[var(--ade-accent)] hover:underline"
+          >
+            Choose your project in Settings
+          </Link>
+        </section>
+      )}
+
       <section className="mt-10">
         <h2 className="text-lg font-medium text-white">Between-session work</h2>
         <p className="mt-1 text-sm text-white/50">
-          Assignments to complete between Zoom calls — not the main course content.
+          Assignments to complete between Zoom calls.
         </p>
         <div className="mt-4 space-y-3" key={version}>
           {assignments.length === 0 ? (
@@ -123,43 +157,6 @@ export function StudentCourseDetail({ courseId }: { courseId: string }) {
                 </Link>
               );
             })
-          )}
-        </div>
-      </section>
-
-      <section className="mt-10">
-        <div className="flex items-center justify-between gap-4">
-          <h2 className="text-lg font-medium text-white">Side project</h2>
-          <Link
-            href={`/student/courses/${courseId}/projects`}
-            className="text-xs font-medium text-[var(--ade-accent)] hover:underline"
-          >
-            Manage projects
-          </Link>
-        </div>
-        <div className="mt-4 space-y-2">
-          {projects.length === 0 ? (
-            <p className="text-sm text-white/40">
-              Pick a realistic project to build during live sessions (ecommerce,
-              dating app, etc.).
-            </p>
-          ) : (
-            projects.map((p) => (
-              <div
-                key={p.id}
-                className="rounded-xl border border-white/10 bg-[#1a1a1a] px-4 py-3 text-sm"
-              >
-                <span className="text-white/50 uppercase text-[10px] tracking-wider">
-                  {p.kind}
-                </span>
-                <p className="text-white">
-                  {projectTemplateById(p.templateId)?.name ?? p.templateId}
-                </p>
-                <p className="text-xs text-white/40">
-                  {p.milestonesCompleted.length} milestones completed
-                </p>
-              </div>
-            ))
           )}
         </div>
       </section>
