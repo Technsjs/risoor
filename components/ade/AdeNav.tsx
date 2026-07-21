@@ -1,7 +1,10 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "@/lib/platform/auth/mock-auth";
+import { dashboardPathForRole } from "@/lib/platform/types";
 
 const links = [
   { label: "Software", href: "/#software" },
@@ -14,6 +17,7 @@ const links = [
 
 export function AdeNav() {
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-10">
@@ -32,6 +36,12 @@ export function AdeNav() {
               {link.label}
             </a>
           ))}
+          <Link
+            href={user ? dashboardPathForRole(user.role) : "/learn/login"}
+            className="text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--ade-muted)] transition-colors hover:text-white"
+          >
+            {user ? "Dashboard" : "Login"}
+          </Link>
         </div>
 
         <div className="flex items-center gap-2">
@@ -65,6 +75,13 @@ export function AdeNav() {
                 {link.label}
               </a>
             ))}
+            <Link
+              href={user ? dashboardPathForRole(user.role) : "/learn/login"}
+              onClick={() => setOpen(false)}
+              className="text-sm font-medium text-white/80"
+            >
+              {user ? "Dashboard" : "Login"}
+            </Link>
           </div>
         </div>
       )}

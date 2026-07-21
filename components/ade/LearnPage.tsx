@@ -8,6 +8,7 @@ import {
   Database,
   GitBranch,
   Layers,
+  Shield,
   Smartphone,
   Sparkles,
 } from "lucide-react";
@@ -21,6 +22,7 @@ import {
 } from "@/lib/learn-catalog";
 import { AdeFooter } from "@/components/ade/AdeFooter";
 import { AdeNav } from "@/components/ade/AdeNav";
+import { LearnLoginCta } from "@/components/ade/LearnLoginCta";
 import { LearnApplyForm } from "@/components/ade/LearnApplyForm";
 
 const topicIcons: Record<string, LucideIcon> = {
@@ -43,6 +45,10 @@ const topicIcons: Record<string, LucideIcon> = {
   postgres: Database,
   firebase: Cloud,
   rest: Database,
+  "secure-coding": Shield,
+  "owasp-top10": Shield,
+  "auth-threats": Shield,
+  "security-testing": Shield,
 };
 
 function TopicCard({ topic }: { topic: LearnTopic }) {
@@ -125,6 +131,7 @@ export function LearnPage() {
               >
                 Start free
               </a>
+              <LearnLoginCta />
             </div>
           </div>
         </section>
